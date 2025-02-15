@@ -5,6 +5,7 @@ from imgui.integrations.glfw import GlfwRenderer
 
 class Window:
     def __init__(self, height, width):
+
         # Initialize glfw
         glfw.init()
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
@@ -15,7 +16,7 @@ class Window:
         # Create a window using glfw
         self.windowHeight = height
         self.windowWidth = width
-        self.window = glfw.create_window(width, height, "Demo", None, None)
+        self.window = glfw.create_window(width, height,"2D Game", None, None)
 
         if not self.window:
             glfw.terminate()
@@ -26,28 +27,18 @@ class Window:
         glfw.set_window_pos(self.window, 450, 30) 
         glfw.make_context_current(self.window)
 
-        # Initialize ImGui
-        self.imgui_context = imgui.create_context()
-        self.imgui_impl = GlfwRenderer(self.window)
-        
-        # Configure ImGui IO
-        io = imgui.get_io()
-        io.display_size = width, height
-
         # Enable Depth and blending
         glEnable(GL_DEPTH_TEST)
         glDepthFunc(GL_LESS) 
 
-        # Set the viewport
+
+        # Set the viewport (Specifies which area to map the opengl co-ordinate system to)        
         glViewport(0, 0, self.windowWidth, self.windowHeight)
 
         # Delta time
         self.prevTime = glfw.get_time()
 
     def Close(self):
-        # Cleanup ImGui
-        if hasattr(self, 'imgui_impl'):
-            self.imgui_impl.shutdown()
         glfw.terminate()
     
     def IsOpen(self):
@@ -57,13 +48,9 @@ class Window:
         currentTime = glfw.get_time()
         deltaTime = currentTime - self.prevTime
         self.prevTime = currentTime
-        time = {"currentTime": currentTime, "deltaTime": deltaTime}
+        time = {"currentTime" : currentTime, "deltaTime" : deltaTime}
 
         glfw.poll_events()
-        
-        # Process ImGui inputs
-        self.imgui_impl.process_inputs()
-        imgui.new_frame()
         
         inputs = []
         if glfw.get_key(self.window, glfw.KEY_1) == glfw.PRESS:
@@ -87,8 +74,5 @@ class Window:
         return inputs, time
     
     def EndFrame(self):
-        # Render ImGui
-        imgui.render()
-        self.imgui_impl.render(imgui.get_draw_data())
-        
-        glfw.swap_buffers(self.window)
+        glfw.swap_buffers(self.window) 
+    
