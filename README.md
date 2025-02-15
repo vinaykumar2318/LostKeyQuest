@@ -7,7 +7,7 @@ This is an exciting game where you navigate different environments, avoid obstac
 Ensure you have Python installed, then install the required dependencies:
 
 ```bash
-pip install imgui numpy random
+pip install imgui numpy random pygame
 ```
 
 How to Run
